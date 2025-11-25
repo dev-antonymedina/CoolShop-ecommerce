@@ -1,3 +1,4 @@
+/* Contenedor principal del checkout */
 .checkout-container {
   width: 80%;
   margin: 2rem auto;
@@ -7,22 +8,26 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Título principal del checkout */
 .checkout-container h1 {
   text-align: center;
   margin-bottom: 2rem;
   color: #333;
 }
 
+/* Layout principal: detalles del cliente + resumen */
 .checkout-content {
   display: flex;
   gap: 2rem;
 }
 
+/* Cada sección del checkout toma el mismo espacio */
 .customer-details,
 .order-summary {
   flex: 1;
 }
 
+/* Títulos de las secciones */
 .customer-details h2,
 .order-summary h2 {
   border-bottom: 2px solid #eee;
@@ -31,16 +36,19 @@
   color: #444;
 }
 
+/* Grupo de cada campo del formulario */
 .form-group {
   margin-bottom: 1rem;
 }
 
+/* Etiquetas de los inputs */
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   color: #555;
 }
 
+/* Inputs del formulario */
 .form-group input {
   width: 100%;
   padding: 0.75rem;
@@ -49,6 +57,7 @@
   font-size: 1rem;
 }
 
+/* Botón para realizar la orden */
 .btn-place-order {
   width: 100%;
   padding: 1rem;
@@ -61,16 +70,19 @@
   transition: background-color 0.3s;
 }
 
+/* Hover del botón */
 .btn-place-order:hover {
   background-color: #218838;
 }
 
-.order-summary ul {
+/* Lista del resumen de compra */
+order-summary ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+/* Cada ítem del resumen (producto - precio) */
 .order-summary li {
   display: flex;
   justify-content: space-between;
@@ -78,10 +90,12 @@
   border-bottom: 1px solid #eee;
 }
 
+/* Quita borde del último item */
 .order-summary li:last-child {
   border-bottom: none;
 }
 
+/* Línea final del resumen: total a pagar */
 .order-summary .total {
   margin-top: 1rem;
   padding-top: 1rem;
@@ -90,4 +104,15 @@
   justify-content: space-between;
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+/* Responsivo: columnas pasan a stack en pantallas pequeñas */
+@media (max-width: 768px) {
+  .checkout-content {
+    flex-direction: column;
+  }
+
+  .checkout-container {
+    width: 95%;
+  }
 }

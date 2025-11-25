@@ -5,14 +5,18 @@ import html2canvas from 'html2canvas';
 import './CheckoutPage.css';
 
 const CheckoutPage = ({ cartItems, cartTotal, clearCart }) => {
+  // Referencia al formulario para EmailJS
   const form = useRef();
+  // Referencia al resumen del pedido para generar el PDF
   const orderSummaryRef = useRef();
+  // Estado para almacenar los datos del cliente
   const [customer, setCustomer] = useState({
     name: '',
     email: '',
     address: '',
   });
 
+  // Maneja los cambios en los campos del formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCustomer(prevCustomer => ({
@@ -21,25 +25,27 @@ const CheckoutPage = ({ cartItems, cartTotal, clearCart }) => {
     }));
   };
 
+  // Maneja el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validación para asegurar que los campos no estén vacíos
+    if (!customer.name.trim() || !customer.email.trim() || !customer.address.trim()) {
+      alert('Por favor llene los campos');
+      return; // Detiene la ejecución si hay campos vacíos
+    }
+
+    // Credenciales de EmailJS
     const serviceID = 'service_iixtos5';
     const templateID = 'template_48cbdln';
     const userID = 'BMFkWmSnTRg6x9mBM';
 
-    // 1. Enviar correo de confirmación simple
-    const templateParams = {
-      name: customer.name,
-      email: customer.email,
-      // Ya no se envía el PDF en el correo
-    };
-
-    emailjs.send(serviceID, templateID, templateParams, userID)
+    // Envía el correo de confirmación usando EmailJS
+    emailjs.sendForm(serviceID, templateID, form.current, userID)
       .then(async (result) => {
           console.log(result.text);
 
-          // 2. Generar y mostrar el PDF en pantalla
+          // Genera el PDF a partir del resumen del pedido
           const canvas = await html2canvas(orderSummaryRef.current);
           const imgData = canvas.toDataURL('image/png');
 
@@ -50,10 +56,10 @@ const CheckoutPage = ({ cartItems, cartTotal, clearCart }) => {
           doc.text(`Email: ${customer.email}`, 20, 40);
           doc.text(`Dirección: ${customer.address}`, 20, 50);
           doc.addImage(imgData, 'PNG', 20, 60, 170, 0);
-          doc.output('dataurlnewwindow');
+          doc.save('factura-coolshop.pdf');
 
-
-          alert('¡Pedido realizado con éxito! Tu factura se ha abierto en una nueva pestaña.');
+          // Muestra un mensaje de éxito y limpia el carrito
+          alert('¡Pedido realizado con éxito! Tu factura se está descargando.');
           clearCart();
       }, (error) => {
           console.log(error.text);
@@ -65,6 +71,7 @@ const CheckoutPage = ({ cartItems, cartTotal, clearCart }) => {
     <div className="checkout-container">
       <h1>Checkout</h1>
       <div className="checkout-content">
+        {/* Sección de detalles del cliente y formulario */}
         <div className="customer-details">
           <h2>Tus Datos</h2>
           <form ref={form} onSubmit={handleSubmit}>
@@ -104,6 +111,7 @@ const CheckoutPage = ({ cartItems, cartTotal, clearCart }) => {
             <button type="submit" className="btn-place-order">Realizar Pedido</button>
           </form>
         </div>
+        {/* Sección del resumen de la compra */}
         <div className="order-summary" ref={orderSummaryRef}>
           <h2>Resumen de tu compra</h2>
           {cartItems.length === 0 ? (
