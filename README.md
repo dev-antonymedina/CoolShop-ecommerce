@@ -58,3 +58,8 @@ Carrito de compras / checkout
 Dashboard de administración de productos
 
 Integración con backend o API
+--------------------------------------
+Autor
+
+Antony Medina — desarrollador del proyecto.
+GitHub: dev-antonymedina
